@@ -109,6 +109,16 @@ impl Aabb {
         let signed_distance = p_normal.dot(aabb_center_world) + half_space.d();
         signed_distance > r
     }
+
+    /// Optimized version of `is_in_half_space` when the AABB is already in world space.
+    /// Use this when `world_from_local` would be the identity transform.
+    #[inline]
+    pub fn is_in_half_space_identity(&self, half_space: &HalfSpace) -> bool {
+        let p_normal = half_space.normal();
+        let r = self.half_extents.abs().dot(p_normal.abs());
+        let signed_distance = p_normal.dot(self.center) + half_space.d();
+        signed_distance > r
+    }
 }
 
 impl From<Sphere> for Aabb {
@@ -319,6 +329,17 @@ impl Frustum {
     pub fn contains_aabb(&self, aabb: &Aabb, world_from_local: &Affine3A) -> bool {
         for half_space in &self.half_spaces {
             if !aabb.is_in_half_space(half_space, world_from_local) {
+                return false;
+            }
+        }
+        true
+    }
+
+    /// contains_aabb is often called with Affine3A::IDENTITY, so we provide an optimized version.
+    #[inline]
+    pub fn contains_aabb_identity(&self, aabb: &Aabb) -> bool {
+        for half_space in &self.half_spaces {
+            if !aabb.is_in_half_space_identity(half_space) {
                 return false;
             }
         }
