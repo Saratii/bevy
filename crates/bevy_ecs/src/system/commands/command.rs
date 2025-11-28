@@ -4,6 +4,8 @@
 //! It also contains functions that return closures for use with
 //! [`Commands`](crate::system::Commands).
 
+use std::vec::Vec;
+
 use crate::{
     bundle::{Bundle, InsertMode, NoBundleEffect},
     change_detection::MaybeLocation,
@@ -75,6 +77,21 @@ where
     let caller = MaybeLocation::caller();
     move |world: &mut World| {
         SpawnBatchIter::new(world, bundles_iter.into_iter(), caller);
+    }
+}
+
+/// A [`Command`] that consumes an iterator of [`Bundles`](Bundle) to spawn a series of entities returning the spawned [`Entity`].
+///
+/// Variant function of [`spawn_batch`].
+#[track_caller]
+pub fn spawn_batch_with_ids<I>(bundles_iter: I) -> impl Command<Vec<Entity>>
+where
+    I: IntoIterator + Send + Sync + 'static,
+    I::Item: Bundle<Effect: NoBundleEffect>,
+{
+    let caller = MaybeLocation::caller();
+    move |world: &mut World| -> Vec<Entity> {
+        SpawnBatchIter::new(world, bundles_iter.into_iter(), caller).collect()
     }
 }
 
