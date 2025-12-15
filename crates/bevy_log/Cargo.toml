@@ -10,7 +10,7 @@ keywords = ["bevy"]
 
 [features]
 trace = ["tracing-error"]
-trace_tracy_memory = ["dep:tracy-client"]
+trace_tracy_memory = ["dep:tracy-client", "tracy-client/ondemand"]
 
 [dependencies]
 # bevy
