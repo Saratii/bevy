@@ -12,6 +12,7 @@ keywords = ["bevy"]
 trace = ["tracing-error"]
 trace_tracy_memory = ["dep:tracy-client"]
 tracing-tracy = ["dep:tracing-tracy"]
+trace_tracy = ["tracing-tracy"]
 
 [dependencies]
 # bevy
