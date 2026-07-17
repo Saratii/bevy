@@ -31,6 +31,7 @@ use bevy_material::{
     key::{ErasedMaterialPipelineKey, ErasedMeshPipelineKey},
     MaterialProperties,
 };
+use bevy_math::proj;
 use bevy_math::{
     ops,
     primitives::{HalfSpace, ViewFrustum},
@@ -1230,7 +1231,7 @@ pub fn prepare_lights(
             flags |= PointLightFlags::CONTACT_SHADOWS_ENABLED;
         }
 
-        let cube_face_projection = Mat4::perspective_infinite_reverse_rh(
+        let cube_face_projection = proj::perspective_infinite_reverse(
             core::f32::consts::FRAC_PI_2,
             1.0,
             light.shadow_map_near_z,
@@ -2020,7 +2021,7 @@ fn create_point_shadow_maps(
     // and ignore rotation because we want the shadow map projections to align with the axes
     let view_translation = GlobalTransform::from_translation(light.transform.translation());
 
-    let cube_face_projection = Mat4::perspective_infinite_reverse_rh(
+    let cube_face_projection = proj::perspective_infinite_reverse(
         core::f32::consts::FRAC_PI_2,
         1.0,
         light.shadow_map_near_z,
