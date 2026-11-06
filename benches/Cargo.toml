@@ -31,6 +31,7 @@ bevy_ui = { path = "../crates/bevy_ui" }
 bevy_platform = { path = "../crates/bevy_platform", default-features = false, features = [
   "std",
 ] }
+wgpu-types = { version = "29.0.3", default-features = false }
 
 # Other crates
 glam = { version = "0.32.0", default-features = false, features = [
