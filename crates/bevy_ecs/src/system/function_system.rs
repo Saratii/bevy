@@ -6,8 +6,7 @@ use crate::{
     query::FilteredAccessSet,
     schedule::{InternedSystemSet, SystemSet},
     system::{
-        check_system_change_tick, FromInput, ReadOnlySystemParam, System, SystemIn, SystemInput,
-        SystemParam, SystemParamItem,
+        FromInput, ReadOnlySystemParam, System, SystemIn, SystemInput, SystemParam, SystemParamItem,
     },
     world::{unsafe_world_cell::UnsafeWorldCell, DeferredWorld, World, WorldId},
 };
@@ -746,12 +745,8 @@ where
     }
 
     #[inline]
-    fn check_change_tick(&mut self, check: CheckChangeTicks) {
-        check_system_change_tick(
-            &mut self.system_meta.last_run,
-            check,
-            self.system_meta.name.clone(),
-        );
+    fn check_change_tick(&mut self, check: &CheckChangeTicks) {
+        self.system_meta.last_run.check_tick(check);
     }
 
     fn default_system_sets(&self) -> Vec<InternedSystemSet> {

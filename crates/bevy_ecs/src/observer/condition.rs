@@ -8,6 +8,7 @@ use core::marker::PhantomData;
 
 use crate::{
     bundle::Bundle,
+    change_detection::CheckChangeTicks,
     event::Event,
     schedule::{BoxedCondition, SystemCondition},
     system::{IntoObserverSystem, IntoSystem},
@@ -32,6 +33,10 @@ impl ObserverCondition {
 
     pub(crate) fn initialize(&mut self, world: &mut World) {
         self.condition.initialize(world);
+    }
+
+    pub(crate) fn check_change_tick(&mut self, check: &CheckChangeTicks) {
+        self.condition.check_change_tick(check);
     }
 
     /// # Safety
